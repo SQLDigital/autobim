@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+{% block page-title %}
+Role/Responsibility
+{% endblock page-title %}
+  
+
+{% block content %}
+
+  <form method="POST">
+      {% csrf_token %}
+      <div class="form-group form-row">
+          <div class="col-sm-5">
+            {% for field in form %}
+              {{field|add_class:"form-control"|attr:"placeholder:Enter a new role here"}}
+            {% endfor %}
+          </div>
+          <button type="submit" class="btn btn-primary">Add Role</button>
+      </div>
+  </form>
+
+  {% if page_obj %}
+
+    <h6>Current Roles</h6>
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead class="thead-light">
+          <tr>
+            <th>#</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for role in page_obj %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ role.name }}</td>
+              <td>{{ role.get_status_display }}</td>
+              <td>
+                <a href="{% url 'update-role' role.id %}"><i class="fas fa-edit"></i></a>
+                <a href="{% url 'delete-role' role.id %}"><i class="fas fa-trash-alt"></i></a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% include 'paginator.html' %}
+
+  {% else %}
+
+    <p>No roles added yet</p>
+
+  {% endif %}
+
+
+
+{% endblock %}

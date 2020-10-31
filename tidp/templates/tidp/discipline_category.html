@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+
+{% block page-title %}
+  TIDP | Settings | Discipline Categories
+{% endblock page-title %}
+
+
+{% block content %}
+
+  <button class="btn btn-primary bs-modal mb-3" data-form-url="{% url 'tidp:discipline-category-create' %}" data-toggle="tooltip"><i class="fa fa-plus"></i> Add new discipline category</button>
+
+  <form method="GET">
+      <div class="row">
+          {% for field in search %}
+              <div class="form-group col-12 col-md-6 ">
+                  {{ field|add_class:"form-control"}}
+              </div>
+          {% endfor %}
+
+          <div>
+              <button type="submit" class="btn btn-primary">Search</button>
+          </div>
+      </div>
+
+
+  </form>
+
+  {% if disciplines %}
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead class="thead-light">
+        <tr>
+          <th>Discipline</th>
+          <th>Category</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for object in disciplines %}
+        <tr>
+          <td>{{object.discipline}}</td>
+          <td>{{object.category}}</td>
+          <td>
+            <a class="bs-modal" data-form-url="{% url 'tidp:update-discipline-category' object.id %}" data-toggle="tooltip"><i
+                class="fas fa-edit"></i></a>
+            <a class="bs-modal" data-form-url="{% url 'tidp:delete-discipline-category' object.id %}" data-toggle="tooltip"><i
+                class="fas fa-trash text-danger"></i></a>
+          </td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+    {% include 'paginator.html' with page_obj=disciplines %}
+  {% else %}
+
+    <p>There are no discipline yet.</p>
+  {% endif %}
+
+  <div class="modal fade" role="dialog" id="modal" tabindex="-1">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content"></div>
+    </div>
+  </div>
+
+{% endblock %}
+
+
+{% block script %}
+  <script type="text/javascript">
+    $(document).ready(function() {
+        $(".bs-modal").each(function () {
+            $(this).modalForm({
+                formURL: $(this).data('form-url')
+            });
+        });
+
+    });
+  </script>
+{% endblock script %}
+

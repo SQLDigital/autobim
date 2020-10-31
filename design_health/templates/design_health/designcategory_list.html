@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+{% block page-title %}
+  Design Categories
+{% endblock page-title %}
+  
+
+{% block content %}
+
+  <form method="POST" class="form-inline">
+    {% csrf_token %}
+
+    {% for field in form %}
+      {{field|add_class:"form-control mb-2 mr-sm-2"}}
+    {% endfor %}
+    
+    <button type="submit" class="btn btn-primary mb-2">Add Category</button>
+
+  </form>
+
+  <form method="GET" id="searchform">
+    {{search}}
+  </form>
+
+  <div class="mt-2">
+    {% if page_obj %}
+
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead class="thead-light">
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for design in page_obj %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{design.name}}</td>
+              <td>
+                <a href="{% url 'design-category-update' design.id %}"><i
+                    class="fas fa-edit"></i></a> &nbsp;
+                <a href="{% url 'design-category-delete' design.id %}"><i
+                    class="fas fa-trash-alt"></i></a>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    {% endif %}
+  </div>
+
+
+{% endblock %}
+
+
+
+{% block script %}
+  <script>
+    $('#id_category').on('change', function(){
+      $('#searchform').submit()
+    })
+  </script>
+{% endblock script %}
+  

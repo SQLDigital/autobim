@@ -1,0 +1,104 @@
+
+{% if user.is_superuser %}
+
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+  <a class="navbar-brand mr-auto mr-lg-0" href="/">AutoBIM&nbsp;<span class="badge badge-warning">BETA</span></a>
+  <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mx-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/">
+          <i class="fa fa-home"></i>
+          Dashboard </a>
+      </li>
+      <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="tidp" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-book"></i>
+              TIDP</a>
+          <div class="dropdown-menu" aria-labelledby="tidp">
+            <a class="dropdown-item" href="{% url 'tidp:projects' %}">Manage Projects</a>
+            <a class="dropdown-item dropdown-toggle" href="#" id="tidpsettings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Settings</a>
+            <div class="dropdown-menu" aria-labelledby="tidpsettings">
+              <a class="dropdown-item" href="{% url 'tidp:roles' %}">Roles</a>
+              <a class="dropdown-item" href="{% url 'tidp:tasks' %}">Tasks</a>
+              <a class="dropdown-item" href="{% url 'tidp:tasktypes' %}">Task Types</a>
+              <a class="dropdown-item" href="{% url 'tidp:project-discipline' %}">Project Discipline </a>
+              <a class="dropdown-item" href="{% url 'tidp:project-discipline-categories' %}">Discipline Categories</a>
+              <a class="dropdown-item" href="{% url 'tidp:company-list' %}">Companies</a>
+              <a class="dropdown-item" href="{% url 'tidp:project-scales' %}">Project Scales</a>
+            </div>
+
+          </div>
+        </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="health-check-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-sync"></i>
+            Design Model Health Check
+        </a>
+        <div class="dropdown-menu" aria-labelledby="health-check-menu">
+          <a class="dropdown-item" href="{% url 'manage-projects' %}">Manage Projects</a>
+          <a class="dropdown-item" href="{% url 'design-roles' %}">Roles/Responsibility</a>
+          <a class="dropdown-item" href="{% url 'company-list' %}">Manage Companies</a>
+          <a class="dropdown-item" href="{% url 'design-categories' %}">Design Categories</a>
+          <a class="dropdown-item dropdown-toggle" href="#" id="heath-check-config-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Design Health Check Configuration
+          </a>
+          <div class="dropdown-menu" aria-labelledby="health-check-menu">
+              <a class="dropdown-item" href="{% url 'concept-design' %}">Concept Design</a>
+              <a class="dropdown-item" href="{% url 'developed-design' %}">Developed Design</a>
+              <a class="dropdown-item" href="{% url 'technical-design' %}">Technical Design</a>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="user-accounts" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-user"></i>
+              Accounts
+        </a>
+        <div class="dropdown-menu" aria-labelledby="user-accounts">
+          <a class="dropdown-item" href="/users/">Users</a>
+          <a class="dropdown-item" href="{% url 'users:changepassword' %}">Change Password</a>
+          <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+{% else %}
+
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+  <a class="navbar-brand mr-auto mr-lg-0" href="/">AutoBIM&nbsp;<span class="badge badge-warning">BETA</span></a>
+  <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mx-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/">
+          <i class="fa fa-home"></i>
+          Dashboard </a>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="user-accounts" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-user"></i>
+              Accounts
+        </a>
+        <div class="dropdown-menu" aria-labelledby="user-accounts">
+          <a class="dropdown-item" href="{% url 'users:changepassword' %}">Change Password</a>
+          <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+{% endif %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+
+{% block page-title %}
+  Dashboard
+{% endblock page-title %}
+  
+
+{% block content %}
+
+<div class="row">
+  <div class="col-6 col-sm-6 col-md-3">
+    <div class="bloc">
+      <span>PROJECTS</span>
+      <h2>{{ number_of_projects }}</h2>
+    </div>
+  </div>
+  <div class="col-6 col-sm-6 col-md-3">
+    <div class="bloc">
+      <span>TASKS</span>
+      <h2>{{ number_of_tasks }}</h2>
+    </div>
+  </div>
+  <div class="col-6 col-sm-6 col-md-3">
+    <div class="bloc">
+      <span>TASKS (DUE)</span>
+      <h2>{{ number_of_due_tasks }}</h2>
+    </div>
+  </div>
+  <div class="col-6 col-sm-6 col-md-3">
+    <div class="bloc">
+      <span>MIDP</span>
+      <h2>{{ number_of_midps }}</h2>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

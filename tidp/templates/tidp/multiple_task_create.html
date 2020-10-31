@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block page-title %}
+TIDP | Create | Project Task
+{% endblock page-title %}
+
+
+{% block content %}
+
+
+<form method="POST">
+    {% csrf_token %}
+    {{ formset.management_form }}
+
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Task Title:</th>
+                <th>Uniclass code:</th>
+                <th>Task type/form of information:</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for form in formset %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    {% for field in form.visible_fields %}
+                        <td>{{ field|add_class:"form-control form-control-sm"}}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <button type="submit" class="mt-4 w-25 btn btn-primary float-right">Create Tasks</button>
+
+</form>
+
+
+
+{% endblock %}
+

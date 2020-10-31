@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+{% block page-title %}
+Update Role
+{% endblock page-title %}
+  
+
+{% block content %}
+
+  <form method="POST">
+    {% csrf_token %}
+
+    {% for field in form %}
+      <div class="form-group">
+        {{field.label_tag}}
+        {{field | add_class:"form-control"}}
+        <small class="form-text text-muted">{{field.help_text}}</small>
+      </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+
+{% endblock %}

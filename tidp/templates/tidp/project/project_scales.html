@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+{% block page-title %}
+TIDP | Project Scales
+{% endblock page-title %}
+
+
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="form-group form-row">
+        <div class="col-sm-3">
+          {{form.scale|add_class:"form-control"|attr:"placeholder:Scale"}}
+        </div>
+        <input type="submit" class="btn btn-primary" value="Add New Scale">
+    </div>
+</form>
+
+
+    {% if projectscale %}
+        <table class="table table-bordered">
+            <thead>
+                <th>Scale</th>
+                <th></th>
+            </thead>
+            <tbody>
+                {% for scale in projectscale %}
+                    <tr>
+                        <td>{{scale}} </td>
+                        <td>
+                            <a href="{% url 'tidp:project-scales-update' scale.id %}"><i class="fa fa-edit"></i></a>
+                            <a href="{% url 'tidp:project-scales-delete' scale.id %}"><i class="fa fa-trash text-danger"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    {% else %}
+        <p>There are no scales yet.</p>
+    {% endif %}
+
+{% endblock %}

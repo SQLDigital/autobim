@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+
+{% block page-title %} 
+  Design Model Health Check | Manage Companies 
+{% endblock page-title %}
+  
+
+{% block content %}
+
+    <button class="btn btn-primary non-submit-btn mb-3" data-toggle="modal" data-target="#addCompanyModal"><i class="fa fa-plus"></i> Add new company</button>
+
+    {% if object_list %}
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead class="thead-light text-center">
+          <tr>
+            <th>Company Name</th>
+            <th>Address</th>
+            <th>Telephone</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for object in object_list %}
+          <tr>
+            <td>{{object}}</td>
+            <td>{{object.street_name}} {{object.street_number}} {{object.city}}
+              {{object.country}}</td>
+            <td>{{object.phone_number}}</td>
+            <td>{{object.email}}</td>
+            <td>
+              <a href="{% url 'update-company' object.id %}"><i
+                  class="fas fa-edit"></i></a>
+              <a href="{% url 'delete-company' object.id %}"><i
+                  class="fas fa-trash"></i></a>
+            </td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+      {% include 'paginator.html' %}
+    {% else %}
+
+      <p>There are no company yet.</p>
+    {% endif %}
+
+
+    <!-- Add company modal -->
+    <div class="modal fade" id="addCompanyModal" tabindex="-1" role="dialog"
+      aria-labelledby="addCompanyModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add new company</h5>
+            <button type="button" class="close" data-dismiss="modal"
+              aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form id="addCompany">
+            <div class="modal-body">
+              {% csrf_token %}
+
+              {% for field in company_form %}
+              <div class="form-row">
+                <div class="form-group col-12 col-md-4 " style="margin-top: 10px;">
+                  {{field.label_tag}}
+                </div>
+                <div class="form-group col-12 col-md-7 ">
+                  {{ field|add_class:"form-control"}}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="addCompanybtn" class="btn btn-primary">Add Company</button>
+              <button type="button" class="btn btn-secondary"
+                data-dismiss="modal">Close</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+
+
+{% block script %}
+<script>
+  $('#addCompanybtn').on('click', function () {
+    $.ajax({
+      type: "POST",
+      url: "{% url 'create-company' %}",
+      cache: false,
+      data: $('form#addCompany').serialize(),
+      success: function (response) {
+        location.reload()
+      },
+      error: function (err) {
+        alert("Company With That name already Exist");
+      }
+
+    })
+  })
+</script>
+{% endblock script %}

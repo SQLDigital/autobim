@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block page-title %}
+Import {{object}} from excel
+{% endblock page-title %}
+
+
+{% block content %}
+
+<p>{{instruction | safe}} </p>
+
+    <div class="row">
+        <div class="col-sm-6 offset-sm-3">
+            <form enctype="multipart/form-data" method="POST">
+                {% csrf_token %}
+
+                <div class="form-check mb-3">
+                    {{form.header}}
+                    <label class="form-check-label" for="id_header">First row is header</label>
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="custom-file">
+                      {{form.excel_file}}
+                      <label class="custom-file-label" for="id_excel_file">Choose file</label>
+                    </div>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Upload</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block page-title %}
+TIDP | Create | Project Task
+{% endblock page-title %}
+
+
+{% block content %}
+
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="form-row">
+
+        {% for field in form %}
+            <div class="form-group col-sm-4">
+            {{field.label_tag}}
+            {{ field}}
+            </div>
+        {% endfor %}
+
+    </div>
+
+
+    <button type="submit" class="mt-4 w-25 btn btn-primary float-right">Create Task</button>
+
+</form>
+
+
+
+{% endblock %}
+
+
+
+{% block script %}
+    <script>
+
+
+        $("#id_clone_count").hide();
+        $('#id_clone').on('change', function(){
+            var checkedva = $('input[name="clone"]:checked').val();
+            if (checkedva == 'yes'){
+                $("#id_clone_count").show();
+            }else {
+                $("#id_clone_count").hide();
+            }
+        })
+    </script>
+{% endblock script %}

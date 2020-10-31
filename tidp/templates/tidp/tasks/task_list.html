@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+{% block page-title %}
+TIDP | Settings | Tasks
+{% endblock page-title %}
+
+
+{% block content %}
+<div>
+
+
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-item nav-link active" style="border: 1px solid #B11FB3;" id="current-project" data-toggle="tab" href="#current" role="tab" aria-controls="nav-home" aria-selected="true">Existing Tasks</a>
+      <a class="nav nav-link bs-modal" data-form-url="{% url 'tidp:task-create' %}" data-toggle="tooltip" style="border: 1px solid #B11FB3;"><i class="fa fa-plus"></i>  Add New Task</a>
+      <a href="{% url 'tidp:import-projecttask' %}" class="nav-item nav-link" style="border: 1px solid #B11FB3;" ><i class="fa fa-upload"></i>  Import Tasks </a>
+
+    </div>
+  </nav>
+
+
+  <!-- Main tab -->
+  <div class="tab-content" id="nav-tabContent">
+
+    <!-- Tab for search -->
+    <div class="tab-pane fade show active" id="current" role="tabpanel" aria-labelledby="current-project">
+      <br>
+
+      <form method="GET">
+          <div class="form-row">
+              {% for field in search %}
+                  <div class="col-sm-3">
+                      {{field.label_tag}}
+                      {{field|add_class:"form-control"}}
+                  </div>
+              {% endfor %}
+
+              <button type="submit" class="mt-4 btn btn-primary ">Display Tasks</button>
+
+
+          </div>
+      </form>
+
+      <div class="mt-2">
+        {% if tasks %}
+          <p>List of Tasks</p>
+
+          <table class="table table-bordered table-hover">
+              <thead class="thead-light">
+              <tr>
+                  <th> Description</th>
+                  <th> Discipline</th>
+                  <th> Discipline Category</th>
+                  <th> Task Type</th>
+                  <th> Role</th>
+                  <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for task in tasks %}
+                  <tr>
+                  <td>{{ task.description}} </td>
+                  <td>{{ task.discipline}} </td>
+                  <td>{{ task.discipline_category}} </td>
+                  <td>{{ task.task_type}} </td>
+                  <td>{{ task.role}} </td>
+                  <td>
+                      <a class="bs-modal" data-form-url="{% url 'tidp:task-update' task.id %}" data-toggle="tooltip"><i class="fa fa-edit"></i></a>
+                      <a class="bs-modal" data-form-url="{% url 'tidp:task-delete' task.id %}" data-toggle="tooltip"><i class="fas fa-trash-alt text-danger"></i></a>
+                  </td>
+                  </tr>
+              {% endfor %}
+              </tbody>
+          </table>
+          {% include "paginator.html" with page_obj=tasks %}
+        {% else %}
+          No task found. Please click ‘Add new task above to create a new project.
+        {% endif %}
+      </div>
+    </div>
+
+
+    <!-- Tab for add new project -->
+    <div class="tab-pane fade" id="new" role="tabpanel"
+      aria-labelledby="current-project">
+      <br><br>
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="form-row">
+          {% for field in form %}
+            <div class="form-group col-sm-6">
+              {{field.label_tag}}
+              {{ field|add_class:"form-control"}}
+            </div>
+          {% endfor %}
+        </div>
+
+        <button type="submit" class="mt-4 w-25 btn btn-primary float-right">Submit</button>
+      </form>
+    </div>
+
+
+  </div>
+
+
+</div>
+
+
+
+<div class="modal fade" role="dialog" id="modal" tabindex="-1">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content"></div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+
+{% block script %}
+  <script type="text/javascript">
+    $(document).ready(function() {
+        $(".bs-modal").each(function () {
+            $(this).modalForm({
+                formURL: $(this).data('form-url')
+            });
+        });
+
+    });
+  </script>
+{% endblock script %}

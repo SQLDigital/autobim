@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+{% block page-title %}
+TIDP | Settings | Task Types
+{% endblock page-title %}
+
+
+{% block content %}
+  <div class="form-group form-row">
+      <button type="button" class="btn btn-primary bs-modal" data-form-url="{% url 'tidp:tasktype-create' %}" data-toggle="tooltip">Add Task Type</button>
+      <a href="{% url 'tidp:import-tasktypes' %}" class="ml-2 btn btn-primary"><i class="fa fa-upload"></i> Upload task types from excel</a>
+  </div>
+
+  {% if tasktypes %}
+
+    <h6>Current Task Types</h6>
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead class="thead-light">
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Code</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for tasktype in tasktypes %}
+            <tr>
+              <td>{{ page_obj.start_index|add:forloop.counter0 }}</td>
+              <td>{{ tasktype.title }}</td>
+              <td>{{ tasktype.code }}</td>
+              <td>
+                <a class="bs-modal" data-form-url="{% url 'tidp:tasktype-update' tasktype.id %}" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
+                <a class="bs-modal" data-form-url="{% url 'tidp:tasktype-update' tasktype.id %}" data-toggle="tooltip" ><i class="fas fa-trash-alt text-danger"></i></a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% include 'paginator.html' %}
+
+  {% else %}
+
+    <p>No roles added yet</p>
+
+  {% endif %}
+
+  <div class="modal fade" role="dialog" id="modal" tabindex="-1">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content"></div>
+    </div>
+  </div>
+
+{% endblock %}
+
+
+{% block script %}
+  <script type="text/javascript">
+    $(document).ready(function() {
+        $(".bs-modal").each(function () {
+            $(this).modalForm({
+                formURL: $(this).data('form-url')
+            });
+        });
+
+    });
+  </script>
+{% endblock script %}

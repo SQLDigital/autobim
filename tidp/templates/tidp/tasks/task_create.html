@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+{% block page-title %}
+TIDP | Create | {{model}}
+{% endblock page-title %}
+
+
+{% block content %}
+
+
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="form-row">
+        {% for field in form %}
+          <div class="form-group col-sm-6">
+            {{field.label_tag}}
+            {{ field|add_class:"form-control"}}
+          </div>
+        {% endfor %}
+      </div>
+
+    <button type="submit" class="mt-4 w-25 btn btn-primary float-right">Create Task</button>
+    </div>
+  </form>
+
+
+
+{% endblock %}
+
+

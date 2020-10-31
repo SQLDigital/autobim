@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+{% block page-title %}
+{{title}}
+{% endblock page-title %}
+
+
+{% block content %}
+
+
+{% if templatename == 'standard_template' %}
+<!-- STANDARD TEMPLATE -->
+<div class="table-responsive">
+    <table class="table text-nowrap table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>S/N</th>
+                <th>Task Title</th>
+                <th>Description</th>
+                <th>Exchange Formats</th>
+                <th>Volume</th>
+                <th>Level</th>
+                <th>Task Category</th>
+                <th>Task Type</th>
+                <th>Role - Company</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for task in tasks %}
+                <tr>
+                    <td>{{forloop.counter}} </td>
+                    <td>{{task.description}}</td>
+                    <td>{{task.unique_code}}  </td>
+                    <td>{{task.exchange_formats}} </td>
+                    <td>{{task.volume}} </td>
+                    <td>{{task.level}} </td>
+                    <td>{{task.task_category}} </td>
+                    <td>{{task.task_type}} </td>
+                    <td>{{task.project_role}} </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+
+{% if templatename == 'scottish_template' %}
+<!-- SCOTTISH TEMPLATE -->
+<div class="table-responsive">
+    <table class="table text-nowrap table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>S/N</th>
+                <th>Uniclass Code</th>
+                <th>Task Title</th>
+                <th>Description</th>
+                <th>Scale/Size</th>
+                <th>EIR Reference</th>
+                <th>PIR Reference</th>
+                <th>AIR Reference</th>
+                <th>Task Category</th>
+                <th>Task Type</th>
+                <th>Role - Company</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for task in tasks %}
+                <tr>
+                    <td>{{forloop.counter}} </td>
+                    <td>{{task.uniclass_code}} </td>
+                    <td>{{task.description}} </td>
+                    <td>{{task.unique_code}} </td>
+                    <td>{{task.scale_or_size}} </td>
+                    <td>{{task.eir_reference}} </td>
+                    <td>{{task.pir_reference}} </td>
+                    <td>{{task.air_reference}} </td>
+                    <td>{{task.task_category}} </td>
+                    <td>{{task.task_type}} </td>
+                    <td>{{task.project_role}} </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+
+{% if templatename == 'balfour_beatty_template' %}
+<!-- BALFOUR BEATTY -->
+<div class="table-responsive">
+    <table class="table text-nowrap table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>S/N</th>
+                <th>Task Title</th>
+                <th>Name</th>
+                <th>Estimated Production Duration</th>
+                <th>Uniclass Code</th>
+                <th>Location</th>
+                <th>Volume</th>
+                <th>Task Type</th>
+                <th>Role - Company</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for task in tasks %}
+                <tr>
+                    <td>{{forloop.counter}} </td>
+                    <td>{{task.description}}</td>
+                    <td>{{task.unique_code}}</td>
+                    <td>{{task.estimated_production_duration}} </td>
+                    <td>{{task.uniclass_code}} </td>
+                    <td>{{task.location}} </td>
+                    <td>{{task.volume}} </td>
+                    <td>{{task.task_type}} </td>
+                    <td>{{task.project_role}} </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+
+
+{% endblock content %}

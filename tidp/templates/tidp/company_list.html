@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+
+{% block page-title %}
+  TIDP | Manage Companies
+{% endblock page-title %}
+
+
+{% block content %}
+
+    <button type="button" class="btn btn-primary non-submit-btn mb-3 bs-modal" data-form-url="{% url 'tidp:create-company' %}" data-toggle="tooltip"><i class="fa fa-plus"></i> Add new company</button>
+
+    {% if object_list %}
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead class="thead-light text-center">
+          <tr>
+            <th>Company Name</th>
+            <th>Address</th>
+            <th>Telephone</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for object in object_list %}
+          <tr>
+            <td>{{object}}</td>
+            <td>{{object.full_address}}</td>
+            <td>{{object.phone_number}}</td>
+            <td>{{object.email}}</td>
+            <td>
+              <a class="bs-modal" data-form-url="{% url 'tidp:company-update' object.id %}" data-toggle="tooltip"><i
+                  class="fas fa-edit"></i></a>
+              <a class="bs-modal" data-form-url="{% url 'tidp:company-delete' object.id %}" data-toggle="tooltip"><i
+                  class="fas fa-trash text-danger"></i></a>
+            </td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+      {% include 'paginator.html' %}
+    {% else %}
+
+      <p>There are no company yet.</p>
+    {% endif %}
+
+
+    <div class="modal fade" role="dialog" id="modal" tabindex="-1">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content"></div>
+      </div>
+    </div>
+
+{% endblock %}
+
+
+{% block script %}
+  <script type="text/javascript">
+    $(document).ready(function() {
+        $(".bs-modal").each(function () {
+            $(this).modalForm({
+                formURL: $(this).data('form-url')
+            });
+        });
+
+    });
+  </script>
+{% endblock script %}

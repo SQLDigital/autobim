@@ -1,0 +1,456 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+{% block page-title %}
+Design Model Health Check |Manage Project
+{% endblock page-title %}
+  
+
+{% block content %}
+<div>
+
+
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a class="nav-item nav-link active" style="border: 1px solid #B11FB3;" id="current-project" data-toggle="tab" href="#current" role="tab" aria-controls="nav-home" aria-selected="true">Current Projects</a>
+      <a class="nav-item nav-link" style="border: 1px solid #B11FB3;" id="new-project" data-toggle="tab" href="#new" role="tab" aria-controls="nav-profile" aria-selected="false">Add New Project</a>
+    </div>
+  </nav>
+
+
+  <!-- Main tab -->
+  <div class="tab-content" id="nav-tabContent">
+
+    <!-- Tab for search -->
+    <div class="tab-pane fade show active" id="current" role="tabpanel" aria-labelledby="current-project">
+      <br>
+
+      
+      {% if not request.GET.pk %}
+        <form method="GET">
+          <div class="form-group">
+            {{project_search.project.label_tag}}
+            {{project_search.project|add_class:"form-control"}}
+          </div>
+
+          <div class="form-group">
+            {{project_search.company.label_tag}}
+            {{project_search.company|add_class:"form-control"}}
+          </div>
+
+          <div class="mt-3 mb-3">
+            <button type="submit" name="searchbyproject" class="btn btn-primary" value="True">Search by project title</button>
+            <button type="submit" name="searchbyclient" class="btn btn-primary" value="True">Search by client</button>
+          </div>
+        </form>  
+      {% endif %}
+        
+      
+
+      <!-- Search Result -->
+      
+      {% if request.GET.searchbyclient or request.GET.searchbyproject %}
+        <div id="projectdisplay">
+
+          {% if search_result %}
+          <p>Search results (click on a project)</p>
+            <table class="table table-bordered table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th>Project Title</th>
+                  <th>Client</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for project in search_result %}
+                  <tr class="clicked-row" data-href="{{project.id}}">
+                    <td>{{ project.project_name}} </td>
+                    <td>{{ project.client}} </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            No project found. Please click ‘Add new project’ above to create a new project.
+          {% endif %}
+
+        </div>  
+      {% endif %}
+        
+      
+
+      <!-- Edit form -->
+      {% if request.GET.pk %}
+        Project Title
+        <div class="form-row">
+          <div class="form-group col-12 col-md-8">
+            {{edit_form.project_name|add_class:"form-control"}}
+          </div>
+          <div class="form-group col-12 col-md-3">
+            <button class="btn btn-primary non-submit-btn" type="button" data-toggle="collapse" data-target="#todo" aria-expanded="false" aria-controls="todo">Edit Project</button>
+          </div>
+        </div>
+
+
+        <div class="collapse" id="todo">
+
+          <div class="accordion" id="accordionExample">
+            <div class="card">
+              <div class="card-header">
+                <p data-toggle="collapse" data-target="#collapseOne" aria-expanded="false">
+                  <i class="fas fa-plus"></i> Assign Project Roles
+                </p>
+              </div>
+
+              <div id="collapseOne" class="collapse" data-parent="#accordionExample">
+                <div class="card-body">
+                  <form method="POST">
+                    {% csrf_token %}
+                    {{project_role_form.management_form}}
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Role</th>
+                          <th>Company (<a data-toggle="modal"
+                            data-target="#addCompanyModal">Add new company</a>)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for form in project_role_form %}
+                          {{ form.id }}
+                        <tr>
+                          <td>
+                            {{ form.instance.role}} {{ form.role.initial.name}}
+                            {{ form.role}}
+                          </td>
+                          <td>{{ form.company|add_class:"form-control"}} </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+
+                    <div class="form-row">
+                      <div class="form-group col-12 text-right">
+                        <button type="submit" name="project_role_form" class="btn btn-primary"> Save </button>
+                        <button type="button" class="btn btn-primary non-submit-btn">Cancel</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <p data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false">
+                  <i class="fas fa-plus"></i> Perform Design Health Check
+                </p>
+              </div>
+              <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                data-parent="#accordionExample">
+                <div class="card-body">
+                  <h5>Select a checklist route</h5>
+                  <div class="accordion" id="designsAccordion">
+                    <div>
+                      <button class="btn btn-primary" data-toggle="collapse" data-target="#conceptDesign" aria-expanded="false"
+                      aria-controls="collapseTwo">Concept Design</button>
+                      <button class="btn btn-primary" data-toggle="collapse" data-target="#developedDesign" aria-expanded="false"
+                      aria-controls="collapseTwo">Developed Design</button>
+                      <button class="btn btn-primary" data-toggle="collapse" data-target="#technicalDesign" aria-expanded="false"
+                      aria-controls="collapseTwo">Technical Design</button>
+                    </div>
+
+                    <!-- view for concept design -->
+                    <div id="conceptDesign" class="collapse" data-parent="#designsAccordion">
+                      <div class="card-body">
+                        <h6>List of Tasks for the project under the category Concept Design</h6>
+                        <form method="POST">
+                          {% csrf_token %}
+                          {{project_task_form_concept.management_form}}
+                          <table class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th>Task</th>
+                                <th>Work Status</th>
+                                <th>Approval Status</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for form in project_task_form_concept %}
+                                {{form.id}}
+                                <tr>
+                                  <td>
+                                    {{ form.instance.task}} {{ form.task.initial.task_name}}
+                                    {{ form.task}}
+                                  </td>
+                                  <td>{{ form.work_status|add_class:"form-control"}} </td>
+                                  <td>{{ form.approval_status|add_class:"form-control"}} </td>
+                                </tr>
+                                
+                              {% endfor %}
+                            </tbody>
+                          </table>
+
+                          <div class="form-row">
+                            <div class="form-group col-12 text-right">
+                              <button type="submit" name="project_task_form_concept" class="btn btn-primary"> Save </button>
+                              <button type="button" class="btn btn-primary non-submit-btn">Cancel</button>
+                            </div>
+                          </div>
+                          
+                        </form>
+                      </div>
+                    </div>
+
+                    <!-- view for developed design -->
+                    <div id="developedDesign" class="collapse" data-parent="#designsAccordion">
+                      <div class="card-body">
+                        <h6>List of Tasks for the project under the category Developed Design</h6>
+                        <form method="POST">
+                          {% csrf_token %}
+                          {{project_task_form_developed.management_form}}
+                          <table class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th>Task</th>
+                                <th>Work Status</th>
+                                <th>Approval Status</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for form in project_task_form_developed %}
+                                {{form.id}}
+                                <tr>
+                                  <td>
+                                    {{ form.instance.task}} {{ form.task.initial.task_name}}
+                                    {{ form.task}}
+                                  </td>
+                                  <td>{{ form.work_status|add_class:"form-control"}} </td>
+                                  <td>{{ form.approval_status|add_class:"form-control"}} </td>
+                                </tr>
+                                
+                              {% endfor %}
+                            </tbody>
+                          </table>
+
+                          <div class="form-row">
+                            <div class="form-group col-12 text-right">
+                              <button type="submit" name="project_task_form_developed" class="btn btn-primary"> Save </button>
+                              <button type="button" class="btn btn-primary non-submit-btn">Cancel</button>
+                            </div>
+                          </div>
+                          
+                        </form>
+                      </div>
+                    </div>
+
+                    <!-- view for technical design -->
+                    <div id="technicalDesign" class="collapse" data-parent="#designsAccordion">
+                      <div class="card-body">
+                        <h6>List of Tasks for the project under the category Technical Design</h6>
+                        <form method="POST">
+                          {% csrf_token %}
+                          {{project_task_form_technical.management_form}}
+                          <table class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th>Task</th>
+                                <th>Work Status</th>
+                                <th>Approval Status</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for form in project_task_form_technical %}
+                                {{form.id}}
+                                <tr>
+                                  <td>
+                                    {{ form.instance.task}} {{ form.task.initial.task_name}}
+                                    {{ form.task}}
+                                  </td>
+                                  <td>{{ form.work_status|add_class:"form-control"}} </td>
+                                  <td>{{ form.approval_status|add_class:"form-control"}} </td>
+                                </tr>
+                                
+                              {% endfor %}
+                            </tbody>
+                          </table>
+
+                          <div class="form-row">
+                            <div class="form-group col-12 text-right">
+                              <button type="submit" name="project_task_form_technical" class="btn btn-primary"> Save </button>
+                              <button type="button" class="btn btn-primary non-submit-btn">Cancel</button>
+                            </div>
+                          </div>
+                          
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+    </div>
+
+
+
+
+
+
+
+
+
+    <!-- Tab for add new project -->
+    <div class="tab-pane fade" id="new" role="tabpanel"
+      aria-labelledby="current-project">
+      <br><br>
+
+      <form id="addProject" method="POST">
+        {% csrf_token %}
+
+        <div class="form-row">
+          <div class="form-group col-md-8">
+            {{project_form.project_name.label_tag}}
+            {{project_form.project_name|add_class:"form-control"}}
+          </div>
+          <div class="form-group col-md-4">
+            {{project_form.project_code.label_tag}}
+            {{project_form.project_code|add_class:"form-control"}}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            {{project_form.further_details_1.label_tag}}
+            {{project_form.further_details_1|add_class:"form-control"}}
+          </div>
+          <div class="form-group col-md-6">
+            {{project_form.further_details_2.label_tag}}
+            {{project_form.further_details_2|add_class:"form-control"}}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            {{project_form.start_date.label_tag}}
+            {{project_form.start_date|add_class:"form-control"}}
+          </div>
+          <div class="form-group col-md-6">
+            {{project_form.end_date.label_tag}}
+            {{project_form.end_date|add_class:"form-control"}}
+          </div>
+        </div>
+
+        {{project_form.client.label_tag}}
+        <div class="form-row align-items-center">
+          <div class="col my-1">
+            {{project_form.client|add_class:""}}
+          </div>
+          <div class="col-md-4 my-1">
+            <button type="button" class="btn btn-primary non-submit-btn"
+                data-toggle="modal" data-target="#addCompanyModal">Add new company</button>
+          </div>
+        </div>
+
+          <button type="submit" class="mt-4 w-25 btn btn-primary non-submit-btn float-right">Submit</button>
+        </div>
+      </form>
+
+
+
+    </div>
+
+
+  </div>
+
+  
+
+  <!-- Add company modal -->
+  <div class="modal fade" id="addCompanyModal" tabindex="-1" role="dialog"
+    aria-labelledby="addCompanyModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add new company</h5>
+          <button type="button" class="close" data-dismiss="modal"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="addCompany" method="POST">
+          <div class="modal-body">
+            {% csrf_token %}
+
+            {% for field in company_form %}
+            <div class="form-row">
+              <div class="form-group col-12 col-md-4 " style="margin-top: 10px;">
+                {{field.label_tag}}
+              </div>
+              <div class="form-group col-12 col-md-7 ">
+                {{ field|add_class:"form-control"}}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Add Company</button>
+            <button type="button" class="btn btn-secondary"
+              data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+
+
+{% block script %}
+  <script>
+    $(".clicked-row").click(function () {
+      var pk = $(this).data("href")
+      window.location = "?pk="+pk
+    });
+
+    $('#addCompany').on('submit', function (event) {
+      event.preventDefault()
+      $.ajax({
+        type: "POST",
+        url: "{% url 'create-company' %}",
+        cache: false,
+        data: $('form#addCompany').serialize(),
+        success: function (response) {
+          location.reload()
+        },
+        error: function (err) {
+          alert("Company With That name already Exist");
+        }
+
+      })
+    })
+
+    $('#addProject').on('submit', function (event) {
+      event.preventDefault()
+      $.ajax({
+        type: "POST",
+        url: "{% url 'project-create' %}",
+        cache: false,
+        data: $('form#addProject').serialize(),
+        success: function (response) {
+          window.location = "{% url 'manage-projects' %}"
+        },
+        error: function (err) {
+          alert("Project with this Project name already exists.");
+        }
+
+      })
+    })
+  </script>
+{% endblock script %}

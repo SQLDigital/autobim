@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+{% block page-title %}
+TIDP | Project | {{project.name}} | Tasks
+{% endblock page-title %}
+
+
+{% block content %}
+
+    <div class="table-responsive">
+        <form method="POST">
+
+            {% if formset.errors %}
+                <div class="alert alert-danger" role="alert">
+                    Please ensure you complete all tasks before submission.
+                </div>
+            {% endif %}
+
+            {% csrf_token %}
+            {{ formset.management_form }}
+
+
+            <table class="table table-sm table-hover">
+                <thead class="thead-light">
+                    <th scope="col">S/N</th>
+                    <th scope="col">Task Title</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Task Type</th>
+
+                {% if project.midp_tipd_template == 'standard_template' %}
+                    <th scope="col">Volume <button type="button" id="fill-volumeStandard" class="btn btn-sm btn-outline-primary">Fill column</button></th>
+                    <th scope="col">Level <button type="button" id="fill-levelStandard" class="btn btn-sm btn-outline-primary">Fill column</button></th>
+                    <th scope="col">Exchange Formats </th>
+                    <th scope="col">Task Category </th>
+                </thead>
+                <tbody>
+                    {% for form in formset %}
+                    {{ form.id }}
+                    <tr>
+                        <th scope="row"> {{forloop.counter}} </th>
+                        <td> {{form.instance.description}} </td>
+                        <td> {{form.instance.project_role.role.name}} </td>
+                        <td> {{form.instance.task_type}} </td>
+                        {% for field in form.visible_fields %}
+                            <td>
+                                {{field|add_class:"form-control form-control-sm"}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                {%endif%}
+
+                {% if project.midp_tipd_template == 'scottish_template' %}
+                    <th scope="col">Uniclass Code <button type="button" id="fill-volumeScottish" class="btn btn-sm btn-outline-primary">Fill column</button></th>
+                    <th scope="col">Scale/Size <button type="button" id="fill-levelScottish" class="btn btn-sm btn-outline-primary">Fill column</button></th>
+                    <th scope="col">EIR Reference </th>
+                    <th scope="col">PIR Reference </th>
+                    <th scope="col">AIR Reference </th>
+                    <th scope="col">Task Category </th>
+                </thead>
+                <tbody>
+                    {% for form in formset %}
+                    {{ form.id }}
+                    <tr>
+                        <th scope="row"> {{forloop.counter}} </td>
+                        <td> {{form.instance.description}} </td>
+                        <td> {{form.instance.project_role.role.name}} </td>
+                        <td> {{form.instance.task_type}} </td>
+                        {% for field in form.visible_fields %}
+                            <td>
+                                {{field|add_class:"form-control form-control-sm"}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                {%endif%}
+
+                {% if project.midp_tipd_template == 'balfour_beatty_template' %}
+                    <th scope="col">Volume <button type="button" id="fill-volumeBB" class="btn btn-sm btn-outline-primary">Fill column</button></th>
+                    <th scope="col">Location <button type="button" id="fill-levelBB" class="btn btn-sm btn-outline-primary">Fill column</button></th>
+                    <th scope="col">Estimated Production Duration </th>
+                    <th scope="col">Uniclass Form of Information </th>
+                </thead>
+                <tbody>
+                    {% for form in formset %}
+                    {{ form.id }}
+                    <tr>
+                        <th scope="row"> {{forloop.counter}} </th>
+                        <td> {{form.instance.description}} </td>
+                        <td> {{form.instance.project_role.role.name}} </td>
+                        <td> {{form.instance.task_type}} </td>
+                        {% for field in form.visible_fields %}
+                            <td>
+                                {{field|add_class:"form-control form-control-sm"}}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                {% endif %}
+               </tbody>
+
+            </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <button type="submit" class="btn btn-primary mt-3 float-right">Mark as complete</button>
+
+        </form>
+
+    </div>
+
+{% endblock %}
+
+
+
+{% block script %}
+    <script>
+        $('#fill-volumeStandard').on('click', function(){
+            var fr = $('#id_form-0-volume').val()
+            if (fr == '') {
+                alert('Please fill in the first row to fill the entire column.')
+            }else {
+                $('table tr td:nth-child(5) input').each(function(index){
+                    if($(this).val() == '') {
+                        $(this).val(fr)
+                    }
+                })
+            }
+        })
+
+
+        $('#fill-volumeBB').on('click', function(){
+            var fr = $('#id_form-0-volume').val()
+            if (fr == '') {
+                alert('Please fill in the first row to fill the entire column.')
+            }else {
+                $('table tr td:nth-child(5) input').each(function(index){
+                    if($(this).val() == '') {
+                        $(this).val(fr)
+                    }
+                })
+            }
+        })
+
+        $('#fill-volumeScottish').on('click', function(){
+            var fr = $('#id_form-0-uniclass_code').val()
+            if (fr == '') {
+                alert('Please fill in the first row to fill the entire column.')
+            }else {
+                $('table tr td:nth-child(5) input').each(function(index){
+                    if($(this).val() == '') {
+                        $(this).val(fr)
+                    }
+                })
+            }
+        })
+
+        $('#fill-levelStandard').on('click', function(){
+            var fr = $('#id_form-0-level').val()
+            if (fr == '') {
+                alert('Please fill in the first row to fill the entire column.')
+            }else {
+                $('table tr td:nth-child(6) input').each(function(index){
+                    if($(this).val() == '') {
+                        $(this).val(fr)
+                    }
+                })
+            }
+        })
+
+        $('#fill-levelScottish').on('click', function(){
+            var fr = $('#id_form-0-scale_or_size').val()
+            if (fr == '') {
+                alert('Please fill in the first row to fill the entire column.')
+            }else {
+                $('table tr td:nth-child(6) select').each(function(index){
+                    if($(this).val() == '') {
+                        $(this).val(fr)
+                    }
+                })
+            }
+        })
+
+        $('#fill-levelBB').on('click', function(){
+            var fr = $('#id_form-0-location').val()
+            if (fr == '') {
+                alert('Please fill in the first row to fill the entire column.')
+            }else {
+                $('table tr td:nth-child(6) input').each(function(index){
+                    if($(this).val() == '') {
+                        $(this).val(fr)
+                    }
+                })
+            }
+        })
+
+
+        $('form').on('submit', function(event){
+            var status = confirm('Are you sure you want to mark as complete?')
+            if (!status) {
+                event.preventDefault()
+            }
+        })
+
+        //copy paste
+        ('input').on('click', function(event){
+            navigator.clipboard.readText()
+            .then(text => {
+                $(this).val(text);
+            }).catch(err => {
+                alert('Failed to read clipboard contents: '+err)
+            });
+         })
+    </script>
+{% endblock script %}

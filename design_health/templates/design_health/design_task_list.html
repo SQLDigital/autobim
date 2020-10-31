@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+{% block page-title %}
+Design Health Check Configuration | {{title}}
+{% endblock page-title %}
+  
+
+{% block content %}
+
+  <button class="btn btn-primary non-submit-btn mb-3" data-toggle="modal" data-target="#addCompanyModal">Add new {{title}} Task</button>
+
+
+  {% if obj_list %}
+
+    {% for key, category in obj_list.items %}
+
+      
+      {% if category %}
+      <h5>Current Task list in this category ({{title}} > {{key}})</h5>
+        <table class="table table-bordered">
+          <thead class="thead-light">
+            <tr>
+              <th>Task</th>
+              <th>Default Role</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+              
+            {% for object in category %}
+              <tr>
+                <td>{{object}}</td>
+                <td>{{object.default_role}}</td>
+                <td>{{object.get_status_display}}</td>
+                <td>
+                  <a href="{% url 'design-task-update' object.id %}"><i
+                      class="fas fa-edit"></i></a>
+                  <a href="{% url 'design-task-delete' object.id %}"><i
+                      class="fas fa-trash"></i></a>
+                </td>
+              </tr>
+            {% endfor %}
+
+          </tbody>
+        </table> 
+      {% endif %}
+      
+
+    {% endfor %}
+
+  {% else %}
+
+    <p>There are no task yet.</p>
+  {% endif %}
+
+
+
+
+  <!-- Add company modal -->
+  <div class="modal fade" id="addCompanyModal" tabindex="-1" role="dialog"
+    aria-labelledby="addCompanyModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add new {{title}} Task</h5>
+          <button type="button" class="close" data-dismiss="modal"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form method="POST">
+          <div class="modal-body">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class="form-row">
+              <div class="form-group col-12 col-md-4 " style="margin-top: 10px;">
+                {{field.label_tag}}
+              </div>
+              <div class="form-group col-12 col-md-7 ">
+                {{ field|add_class:"form-control"}}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="button" class="btn btn-secondary"
+              data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}

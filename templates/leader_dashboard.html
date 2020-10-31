@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+
+{% block page-title %}
+  Dashboard
+{% endblock page-title %}
+
+
+{% block content %}
+
+
+{% if projects_for_leader %}
+  <p>Assigned Projects as a team leader</p>
+  <table class="table table-bordered table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th>Name</th>
+        <th>Client</th>
+        <th>Number</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for project in projects_for_leader %}
+        <tr class="clickable-row" data-href="{% url 'tidp:project-detail-leader' project.id %}">
+          <td>{{project.name}} </td>
+          <td>{{project.client}} </td>
+          <td>{{project.number}} </td>
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+{% endif %}
+
+{% if projects_for_member %}
+  <p>Assigned Projects as a team member</p>
+  <table class="table table-bordered table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th>Name</th>
+        <th>Client</th>
+        <th>Number</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for project in projects_for_member %}
+        <tr class="clickable-row" data-href="{% url 'tidp:project-detail' project.id %}">
+          <td>{{project.name}} </td>
+          <td>{{project.client}} </td>
+          <td>{{project.number}} </td>
+        </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+{% endif %}
+
+
+{% endblock %}
+
+
+
+{% block script %}
+  <script>
+    $(".clickable-row").click(function () {
+      var pk = $(this).data("href")
+      window.location = pk
+    });
+  </script>
+{% endblock script %}

@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %} - Project {% endblock %}
+
+{% block page-title %}
+Users
+{% endblock page-title %}
+  
+
+{% block content %}
+
+  <form method="POST">
+    {% csrf_token %}     
+      <div class="form-group row">
+          <label for="organization">Email</label>
+          <input type="email" class="form-control form-control-sm" name="email" placeholder="x@abc.com">
+      </div>
+
+      <div class="form-group row">
+          <input type="submit" name="add-originator" class="btn btn-primary btn-block btn-small" id="">
+      </div>                
+
+  </form>
+
+    <!-- <h2>Section title</h2> -->
+    
+  <div class="table-responsive">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Email</th>
+          <th>BIM Manager</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if users %}
+          {% for user in users %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ user.email }}</td>
+              <td>
+                  {% if user.is_superuser == 1 %}
+                    Yes
+                  {% else %}
+                      No
+                  {% endif %}
+              </td>
+              <td>
+                {% if user.is_active == 1 %}
+                    Yes
+                {% else %}
+                    No
+                {% endif %}
+              </td>
+              <td>{{ user.date_joined }}</td>
+              <td>
+                <a data-toggle="modal" data-target="#enable-{{user.id}}-model" href="#"><i class="fa fa-check" aria-hidden="true"></i></a>&nbsp;&nbsp;<a data-toggle="modal" data-target="#delete-{{user.id}}-model" href="#"><i class="fas fa-trash-alt"></i></a>
+
+                <div class="modal fade" tabindex="-1" id="enable-{{user.id}}-model" role="dialog">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Confirm action</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/users/enable/{{user.id}}/" method="POST">
+                              {% csrf_token %}                      
+                                <div class="form-group row">
+                                    <input type="submit" class="form-control form-control-sm" id="" value="REACTIVATE ACCOUNT">
+                                </div>                
+                    
+                            </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                <div class="modal fade" tabindex="-1" id="delete-{{user.id}}-model" role="dialog">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Confirm action</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/users/delete/{{user.id}}/" method="POST">
+                              {% csrf_token %}                      
+                                <div class="form-group row">
+                                    <input type="submit" class="form-control form-control-sm red-bg" id="" value="DELETE">
+                                </div>                
+                    
+                            </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </td>
+            </tr>
+          {% endfor %}
+        {% else %}
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+{% block script %}
+<script type="javascript">
+  $(function() {
+    $('.selectpicker').selectpicker();
+  });
+</script>
+{% endblock %}

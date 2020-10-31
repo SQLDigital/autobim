@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+{% block page-title %}
+TIDP | Settings | Originators
+{% endblock page-title %}
+
+
+{% block content %}
+    <div>
+
+        <button class="btn btn-primary mb-3" data-toggle="modal" data-target="#addTaskModal"><i class="fa fa-plus"></i> Add new Originator</button>
+
+        {% if roles %}
+            <p>List of originators</p>
+            <div class="responsive-table">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-light">
+                    <tr>
+                        <th> Organization</th>
+                        <th> Contact Name</th>
+                        <th> Project Role</th>
+                        <th> Code </th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for role in roles %}
+                        <tr>
+                        <td>{{ role.organization}} </td>
+                        <td>{{ role.contact_name}} </td>
+                        <td>{{ role.role}} </td>
+                        <td>{{ role.code}} </td>
+                        <td>
+                            <a href="{% url 'tidp:originator-update' role.id %}?{{request.GET.urlencode}}"><i class="fa fa-edit"></i></a>
+                            <a href="{% url 'tidp:originator-delete' role.id %}"><i class="fas fa-trash-alt text-danger"></i></a>
+                        </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% include "paginator.html" with page_obj=roles %}
+
+        {% else %}
+            <div>
+                There are currently no originator.
+            </div>
+        {% endif %}
+
+
+
+
+        <!-- Add company modal -->
+    <div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog"
+    aria-labelledby="addDisciplineModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add new originator</h5>
+          <button type="button" class="close" data-dismiss="modal"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form method="POST">
+          <div class="modal-body">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class="form-row">
+              <div class="form-group col-12 col-md-4 " style="margin-top: 10px;">
+                {{field.label_tag}}
+              </div>
+              <div class="form-group col-12 col-md-7 ">
+                {{ field|add_class:"form-control"}}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Add Originator</button>
+            <button type="button" class="btn btn-secondary"
+              data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+
+{% block page-title %}
+  TIDP | Settings | Project Discipline
+{% endblock page-title %}
+
+
+{% block content %}
+
+    <button class="btn btn-primary bs-modal mb-3" data-form-url="{% url 'tidp:discipline-create' %}" data-toggle="tooltip"><i class="fa fa-plus"></i> Add new discipline</button>
+
+
+    <form method="GET">
+        <div class="row">
+            {% for field in search %}
+                <div class="form-group col-12 col-md-6 ">
+                    {{ field|add_class:"form-control"}}
+                </div>
+            {% endfor %}
+
+            <div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+
+
+    </form>
+
+    {% if object_list %}
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead class="thead-light">
+          <tr>
+            <th>Type Description</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for object in object_list %}
+          <tr>
+            <td>{{object}}</td>
+            <td>
+              <a class="bs-modal" data-form-url="{% url 'tidp:update-discipline' object.id %}" data-toggle="tooltip"><i
+                  class="fas fa-edit"></i></a>
+              <a class="bs-modal" data-form-url="{% url 'tidp:delete-discipline' object.id %}" data-toggle="tooltip"><i
+                  class="fas fa-trash text-danger"></i></a>
+            </td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+      {% include 'paginator.html' %}
+    {% else %}
+
+      <p>There are no discipline yet.</p>
+    {% endif %}
+
+
+    <div class="modal fade" role="dialog" id="modal" tabindex="-1">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content"></div>
+      </div>
+    </div>
+
+{% endblock %}

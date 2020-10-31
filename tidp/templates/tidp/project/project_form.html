@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+
+{% block page-title %}
+TIDP | Add new project
+{% endblock page-title %}
+
+
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        {{form.name.label_tag}}
+        {{form.name}}
+      </div>
+      <div class="form-group col-md-6">
+        {{form.number.label_tag}}
+        {{form.number}}
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        {{form.code.label_tag}}
+        {{form.code}}
+      </div>
+      <div class="form-group col-md-6">
+        {{form.midp_tipd_template.label_tag}}
+        {{form.midp_tipd_template}}
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        {{form.discipline.label_tag}}
+        {{form.discipline}}
+      </div>
+      <div class="form-group col-md-6">
+        {{form.discipline_category.label_tag}}
+        {{form.discipline_category}}
+      </div>
+
+    </div>
+
+    {{form.client.label_tag}}
+    <div class="form-row align-items-center">
+      <div class="col my-1">
+        {{form.client}}
+      </div>
+      <div class="col-md-4 my-1">
+        <a class="btn btn-primary btn-sm bs-modal" data-form-url="{% url 'tidp:create-company' %}?next={% url 'tidp:project-create' %}" data-toggle="tooltip">Add new company</button>
+        </a>
+      </div>
+    </div>
+
+    <button type="submit" class="mt-4 w-25 btn btn-primary float-right">Add new project</button>
+
+  </form>
+
+
+  <div class="modal fade" role="dialog" id="modal" tabindex="-1">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content"></div>
+    </div>
+  </div>
+
+
+{% endblock %}
+
+
+
+{% block script %}
+  <script type="text/javascript">
+    $(document).ready(function() {
+        $(".bs-modal").each(function () {
+            $(this).modalForm({
+                formURL: $(this).data('form-url')
+            });
+        });
+
+    });
+  </script>
+{% endblock script %}

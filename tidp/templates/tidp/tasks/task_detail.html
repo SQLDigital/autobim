@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+
+{% block page-title %}
+TIDP | {{task.project.name}} | {{ task}}
+{% endblock page-title %}
+
+
+{% block content %}
+
+<ul class="list-group mt-3">
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-sm-4">Project Name:</div>
+      <div class="col-sm-8">{{ task.project}}</div>
+    </div>
+  </li>
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-sm-4">Uniclass Code</div>
+      <div class="col-sm-8">{{ task.uniclass_code}}</div>
+    </div>
+  </li>
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-sm-4">Discipline:</div>
+      <div class="col-sm-8">{{ task.discipline}}</div>
+    </div>
+  </li>
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-sm-4">Discipline Category:</div>
+      <div class="col-sm-8">{{ task.discipline_category}}</div>
+    </div>
+  </li>
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-sm-4">Role:</div>
+      <div class="col-sm-8">{{ task.role}}</div>
+    </div>
+  </li>
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-sm-4">Task Type:</div>
+      <div class="col-sm-8">{{ task.task_type}}</div>
+    </div>
+  </li>
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-sm-4">Task Code:</div>
+      <div class="col-sm-8">{{ task.unique_code}}</div>
+    </div>
+  </li>
+</ul>
+
+{% endblock %}
+
+
