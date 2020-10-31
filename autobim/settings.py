@@ -30,7 +30,7 @@ SECRET_KEY = 'm0!w7723eo#56mxxq3q5+-zc!a)4a+v=o!_qr11nvripp8lnk&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '35.209.23.198', 'autobim.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1', '35.209.23.198', 'autobimm.herokuapp.com']
 
 # Application definition
 
