@@ -111,7 +111,9 @@ DATABASES = {
     }
 }
 
-
+if 'DATABASE_URL' in os.environ:
+    import dj_database_url
+    DATABASES = {'default': dj_database_url.config()}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -180,4 +182,4 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL='autobim@intenttech.com'
 
 
-SITE_DOMAIN = 'https://autobim.herokuapp.com'
+SITE_DOMAIN = 'https://autobimm.herokuapp.com'
